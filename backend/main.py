@@ -10,6 +10,8 @@ import json
 import os
 from datetime import datetime
 
+
+
 # =============================================================================
 # CONFIGURACIÓN
 # =============================================================================
@@ -111,20 +113,25 @@ def main():
 
         for event in events_iterator:
             try:
-                key = event.key.decode('utf-8')
+                # El event puede ser KeyValue (PUT) o None (DELETE)
+                key = event.key.decode('utf-8') if event.key else None
                 
-                if event.delete:
-                    print(f"❌ Héroe eliminado: {key}")
+                # ✅ Si el valor es None, es un DELETE
+                if event.value is None:
+                    print(f"❌ [{datetime.now().strftime('%H:%M:%S')}] Héroe eliminado: {key}")
                     if key in heroes_data:
                         del heroes_data[key]
                 else:
+                    # ✅ Si hay valor, es un PUT
                     val_str = event.value.decode('utf-8')
-                    print(f"✨ Cambio en {key}")
+                    print(f"✨ [{datetime.now().strftime('%H:%M:%S')}] Cambio en {key}: {val_str}")
+                    
                     try:
                         heroes_data[key] = json.loads(val_str)
                     except json.JSONDecodeError:
-                        heroes_data[key] = {"raw": val_str}
+                        heroes_data[key] = {"raw": val_str, "error": "JSON inválido"}
                 
+                # Actualizar el archivo JSON después de cada cambio
                 guardar_json(heroes_data)
                 
             except Exception as e:

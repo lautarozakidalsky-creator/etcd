@@ -9,14 +9,14 @@
 // =============================================================================
 
 // Ruta al JSON (sale de frontend/ y entra a datos_publicos/)
-const JSON_URL = '../datos_publicos/datos_heroes.json';
+const JSON_URL = '/datos_publicos/datos_heroes.json';
 
 // Intervalo de actualización (milisegundos)
 const UPDATE_INTERVAL = 2000;
 
 // =============================================================================
 // FUNCIONES
-// =============================================================================
+// =======================================================const JSON_URL = '/datos_publicos/datos_heroes.json';======================
 
 /**
  * Obtiene los datos del archivo JSON
